@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_answer, only: [:show]
   before_action :set_question, only: [:new, :create]
 
@@ -13,9 +14,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
 
     if @answer.save
-      redirect_to @question
+      redirect_to @question, notice: 'Your answer successfully created!'
     else
-      render :new
+      redirect_to @question, alert: "The body of the answer can't be blank"
     end
   end
 

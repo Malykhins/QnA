@@ -1,2 +1,10 @@
-h1= @question.title
-p= @question.body
+= render 'shared/errors', resource: @answer
+
+h1 = @question.title
+p = @question.body
+ul
+  -@question.answers.each do |answer|
+    li= answer.body
+
+h2 Add an Answer:
+= render 'answers/form'
