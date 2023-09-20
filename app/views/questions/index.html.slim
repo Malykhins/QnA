@@ -1,3 +1,7 @@
+h1 Welcome to Home Page
+
+= button_to "Sign out", destroy_user_session_path, method: :delete
+
 ul
   -@questions.each do |question|
     li= question.title
