@@ -1,4 +1,8 @@
-= form_with model: [@question, @question.answers.build], local: true do |form|
-  = form.label :body
-  = form.text_area :body, placeholder: 'Write your answer here'
-  = form.submit "Create Answer"
+= form_with model: [@question, @answer], local: true do |f|
+  = render 'shared/errors', resource: @answer
+
+  = f.label :body
+  = f.text_area :body, placeholder: 'Write your answer here'
+
+  br
+  = f.submit 'Create Answer'

@@ -1,23 +1,22 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:show]
-  before_action :set_question, only: [:new, :create]
-
-  def show
-  end
-
-  def new
-    @answer = @question.answers.new
-  end
+  before_action :set_question, only: %i[create]
+  before_action :set_answer, only: %i[destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
+    @answer.user = current_user
 
     if @answer.save
       redirect_to @question, notice: 'Your answer successfully created!'
     else
-      redirect_to @question, alert: "The body of the answer can't be blank"
+      render 'questions/show', alert: "The body of the answer can't be blank"
     end
+  end
+
+  def destroy
+    @answer.destroy if current_user.author_of?(@answer)
+    redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted!'
   end
 
   private

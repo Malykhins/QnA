@@ -1,10 +1,21 @@
-= render 'shared/errors', resource: @answer
-
 h1 = @question.title
 p = @question.body
-ul
-  -@question.answers.each do |answer|
-    li= answer.body
+
+- if current_user&.author_of?(@question)
+    p= link_to 'Delete Question', question_path(@question), method: :delete
+
+h2 Answer:
+
+- if @question.answers.present?
+    ul
+    - @question.answers.each do |answer|
+        - if answer.persisted?
+            li = answer.body
+            - if current_user&.author_of?(answer)
+                p = link_to 'Delete Answer', answer, method: :delete
+
 
 h2 Add an Answer:
-= render 'answers/form'
+== render 'shared/errors', resource: @answer
+
+== render 'answers/form'

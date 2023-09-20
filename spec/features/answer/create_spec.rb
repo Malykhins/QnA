@@ -14,6 +14,7 @@ feature 'User can create answer', "
     before { sign_in(user) }
 
     background do
+      create(:answer, question: question, user: user)
       visit question_path(question)
     end
 
@@ -26,10 +27,11 @@ feature 'User can create answer', "
 
       expect(page).to have_content 'Text of answer'
     end
+
     scenario 'Answer the question with errors' do
       click_on 'Create Answer'
 
-      expect(page).to have_content "The body of the answer can't be blank"
+      expect(page).to have_content "Body can't be blank"
     end
   end
 
