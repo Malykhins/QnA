@@ -4,13 +4,11 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[destroy]
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfully created!'
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    if @answer.persisted?
+      flash.now[:notice] = 'Your answer successfully created!'
     else
-      render 'questions/show', alert: "The body of the answer can't be blank"
+      flash.now[:error] = 'Error creating an answer!'
     end
   end
 

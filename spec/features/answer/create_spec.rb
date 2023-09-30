@@ -10,23 +10,27 @@ feature 'User can create answer', "
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     before { sign_in(user) }
 
     background do
       create(:answer, question: question, user: user)
+
       visit question_path(question)
     end
 
     scenario 'Answer the question' do
-      fill_in 'Body', with: 'Text of answer'
-      click_on 'Create Answer'
+      within('.new-answer-form') do
+        fill_in 'Body', with: 'Text of answer'
+        click_on 'Create Answer'
+      end
 
       expect(current_path).to eq(question_path(question))
-      expect(page).to have_content 'Your answer successfully created!'
-
-      expect(page).to have_content 'Text of answer'
+      within '.answers' do
+        expect(page).to have_content 'Text of answer'
+      end
     end
+
 
     scenario 'Answer the question with errors' do
       click_on 'Create Answer'
@@ -37,6 +41,7 @@ feature 'User can create answer', "
 
   scenario 'Unauthenticated user tries to answer the question' do
     visit question_path(question)
+
     click_on 'Create Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'

@@ -1,9 +1,10 @@
 h1 Welcome to Home Page
 
-= button_to "Sign out", destroy_user_session_path, method: :delete
-
 ul
-  -@questions.each do |question|
-    li= question.title
+  - @questions.each do |question|
+    li
+      |
+      span= question.title
+      = link_to 'Show', question_path(question)
 
 p= link_to 'Ask question', new_question_path
