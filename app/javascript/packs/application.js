@@ -9,6 +9,9 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 require ("jquery")
 
+const context = require.context('.', true, /\.js$/)
+context.keys().forEach(context)
+
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
