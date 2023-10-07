@@ -2,21 +2,20 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :set_question, only: %i[show edit update destroy]
+  before_action :find_questions, only: %i[index update]
 
   def index
-    @questions = Question.all
   end
 
   def show
+    @answers = @question.answers.sort_by_best
     @answer = Answer.new
   end
 
   def new
     @question = Question.new
   end
-
-  def edit; end
 
   def create
     @question = current_user.questions.new(question_params)
@@ -29,10 +28,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question) && @question.update(question_params)
-      redirect_to @question
+    @question.update(question_params) if current_user.author_of?(@question)
+
+    if @question.persisted?
+      flash.now[:notice] = 'Your question successfully updated!'
     else
-      render :edit
+      flash.now[:error] = 'Error updating a question!'
     end
   end
 
@@ -43,11 +44,15 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
+  def set_question
     @question = Question.find(params[:id])
   end
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def find_questions
+    @questions = Question.all
   end
 end

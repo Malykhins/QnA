@@ -1,10 +1,6 @@
 h1 Welcome to Home Page
 
-ul
-  - @questions.each do |question|
-    li
-      |
-      span= question.title
-      = link_to 'Show', question_path(question)
+.questions
+  = render @questions
 
 p= link_to 'Ask question', new_question_path

@@ -1,0 +1,7 @@
+$('.flash-message').html('<%= j render 'shared/flash' %>');
+
+$('.question-errors.<%= @question.id %>').html('<%= render 'shared/errors', resource: @question %>');
+
+<% unless @question.errors.present? %>
+  $('.questions').html('<%= j render @questions.order(created_at: :asc) %>');
+<% end %>
