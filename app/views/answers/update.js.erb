@@ -1,9 +1,9 @@
-$('[class^="flash"]').html('<%= j render 'shared/flash' %>');
+$('.flash-message').html('<%= j render 'shared/flash' %>');
 
 $('.answer-errors.<%= @answer.id %>').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% unless @answer.errors.present? %>
 
-$('.answers').html('<%= j render @answer.question.answers.order(created_at: :asc) %>');
+$('.answers').html('<%= j render @answer.question.answers %>');
 
 <% end %>

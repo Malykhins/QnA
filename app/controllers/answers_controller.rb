@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: %i[create]
-  before_action :set_answer, only: %i[destroy update]
+  before_action :set_answer, only: %i[destroy update set_best]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
@@ -35,6 +37,18 @@ class AnswersController < ApplicationController
     end
   end
 
+  def set_best
+    return unless current_user.author_of?(@answer.question)
+
+    if params[:answer][:best]
+      @answer.mark_as_best(params[:answer][:best])
+    else
+      @answer.update_column(:best, false)
+    end
+
+    flash.now[:notice] = 'The best answer is called!'
+  end
+
   private
 
   def set_answer
@@ -42,7 +56,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :best)
   end
 
   def set_question

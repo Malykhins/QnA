@@ -1,4 +1,13 @@
-p= answer.body
+p = answer.body
+p = "Best" if answer.best
+
+.best-answer[id="best-answer-#{answer.id}"]
+  - if current_user&.author_of?(answer.question)
+    = form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
+      = f.check_box :best, checked: answer.best, onchange: "$.ajax({ url: $(this.form).attr('action'),
+                                                 method: $(this.form).attr('method'),
+                                                 data: $(this.form).serialize() });"
+      = f.label :best, 'Best Answer'
 
 - if current_user&.author_of?(answer)
   p = link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true

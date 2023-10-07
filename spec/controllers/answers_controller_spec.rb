@@ -96,4 +96,22 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'SET_BEST #update' do
+    before { login(user) }
+    let(:answer) { create(:answer, question: question, user: user) }
+
+    context 'with valid attributes' do
+      it 'changes answer attributes' do
+        patch :set_best, params: { id: answer, answer: { best: true } }, format: :js
+        answer.reload
+        expect(answer.best).to eq(true)
+      end
+
+      it 'renders update view' do
+        patch :set_best, params: { id: answer, answer: { best: true }, format: :js }
+        expect(response).to render_template :set_best
+      end
+    end
+  end
 end
