@@ -1,21 +1,15 @@
 p= answer.body
 
 - if current_user&.author_of?(answer)
-  p= link_to 'Delete Answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }
+  p = link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
+  p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  p=   link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id}
-
-  .answer-errors[class= "#{ answer.id }"]
+  .answer-errors[class="#{answer.id}"]
     = render 'shared/errors', resource: @answer
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{ answer.id }" }, local: false do |f|
-
+  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body
-
     br
     = f.submit 'Save'
-
-
-
 

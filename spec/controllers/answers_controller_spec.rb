@@ -38,21 +38,37 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do
     before { login(user) }
-    let!(:answer) { create(:answer, question: question, user: user) }
 
-    it 'deletes the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    context 'the user is the author of the answer' do
+      let!(:answer) { create(:answer, question: question, user: user) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to show question' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question_path(question)
+    context 'the user is not the author of the answer' do
+      let!(:answer) { create(:answer, question: question) }
+
+      it 'does not delete the answer' do
+        expect { delete :destroy, params: { id: answer }, format: :js }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to show question' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
+      end
     end
   end
 
   describe 'EDIT #update' do
     before { login(user) }
-    let!(:answer) { create(:answer, question: question) }
+    let!(:answer) { create(:answer, question: question, user: user) }
 
     context 'with valid attributes' do
       it 'changes answer attributes' do

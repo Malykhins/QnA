@@ -7,12 +7,13 @@ p = @question.body
 h2 Answer:
 
 .answers
-  = render @question.answers
+  = render @answers
 
 
 h2 Add an Answer:
 
-.answer-errors
+.new-answer-errors
   = render 'shared/errors', resource: @answer
 
-== render 'answers/form'
+.new-answer-form
+  = render 'answers/form'

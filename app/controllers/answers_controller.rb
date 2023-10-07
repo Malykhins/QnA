@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
+
     if @answer.persisted?
       flash.now[:notice] = 'Your answer successfully created!'
     else
@@ -13,12 +14,19 @@ class AnswersController < ApplicationController
   end
 
   def destroy
+    @answers = Answer.all
+
     @answer.destroy if current_user.author_of?(@answer)
-    redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted!'
+
+    if @answer.persisted?
+      flash.now[:error] = 'Error answer not deleted!'
+    else
+      flash.now[:notice] = 'Your answer successfully deleted!'
+    end
   end
 
   def update
-    @answer.update(answer_params)
+    @answer.update(answer_params) if current_user.author_of?(@answer)
 
     if @answer.persisted?
       flash.now[:notice] = 'Your answer successfully updated!'

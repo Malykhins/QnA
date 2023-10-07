@@ -21,11 +21,11 @@ feature 'User can edit his question', %q{
 
       click_on 'Edit'
       within '.questions' do
-        fill_in 'Your question', with: 'edited question'
+        fill_in 'Title', with: 'edited title'
         click_on 'Save'
 
         expect(page).to_not have_content question.body
-        expect(page).to have_content 'edited question'
+        expect(page).to have_content 'edited title'
         expect(page).to_not have_selector 'textarea'
       end
     end

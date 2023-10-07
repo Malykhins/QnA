@@ -17,10 +17,11 @@ feature 'User can delete answer', "
       visit question_path(question)
     end
 
-    scenario 'try to delete the answer' do
+    scenario 'try to delete the answer', js: true do
       click_on 'Delete Answer'
 
-      expect(page).to have_content 'Your answer successfully deleted!'
+      expect(page).to_not have_content answer.body
+      expect(page).to have_no_content 'Delete Answer'
     end
   end
 
@@ -32,7 +33,7 @@ feature 'User can delete answer', "
       visit question_path(question)
     end
 
-    scenario 'try to delete the answer' do
+    scenario 'try to delete the answer', js: true do
       expect(page).to have_no_content 'Delete Answer'
     end
   end

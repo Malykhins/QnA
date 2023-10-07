@@ -1,4 +1,4 @@
-$('[class^="flash"]').html('<%= j render 'shared/flash' %>');
+$('.flash-message').html('<%= j render 'shared/flash' %>');
 
 $('.new-answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
