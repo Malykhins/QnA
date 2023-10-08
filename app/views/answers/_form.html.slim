@@ -4,4 +4,8 @@
   = f.text_area :body, id: 'answer_body'
 
   br
+  = f.label :files
+  = f.file_field :files, multiple: true
+
+  br
   = f.submit 'Create Answer'

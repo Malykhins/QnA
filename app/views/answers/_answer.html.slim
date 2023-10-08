@@ -1,6 +1,11 @@
 p = answer.body
 p = "Best" if answer.best
 
+- if answer.files.attached?
+  - answer.files.each do |file|
+    p= link_to file.filename.to_s, url_for(file)
+
+
 .best-answer[id="best-answer-#{answer.id}"]
   - if current_user&.author_of?(answer.question)
     = form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
