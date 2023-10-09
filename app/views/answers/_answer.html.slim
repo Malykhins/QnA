@@ -21,9 +21,14 @@ p = "Best" if answer.best
   .answer-errors[class="#{answer.id}"]
     = render 'shared/errors', resource: @answer
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
+  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false, multipart: true do |f|
     = f.label :body, 'Your answer'
-    = f.text_area :body
+    = f.text_area :body, value: answer.body
+
+    br
+    = f.label :files
+    = f.file_field :files, multiple: true
+
     br
     = f.submit 'Save'
 

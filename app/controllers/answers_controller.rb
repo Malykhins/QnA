@@ -28,12 +28,13 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params) if current_user.author_of?(@answer)
+    return unless current_user.author_of?(@answer)
 
-    if @answer.persisted?
-      flash.now[:notice] = 'Your answer successfully updated!'
+    if @answer.update(answer_params)
+      @answer.files.attach(params[:files]) if params[:files].present?
+      flash.now[:notice] = 'Your answer was successfully updated!'
     else
-      flash.now[:error] = 'Error creating an answer!'
+      flash.now[:error] = 'Error updating the answer!'
     end
   end
 

@@ -4,6 +4,6 @@ $('.answer-errors.<%= @answer.id %>').html('<%= render 'shared/errors', resource
 
 <% unless @answer.errors.present? %>
 
-$('.answers').html('<%= j render @answer.question.answers %>');
+$('.answers').html('<%= j render @answer.question.answers.sort_by_best %>');
 
 <% end %>

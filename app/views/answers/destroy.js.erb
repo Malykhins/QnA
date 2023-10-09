@@ -1,5 +1,5 @@
 $('.flash-message').html('<%= j render 'shared/flash' %>');
 
 <% unless @answer.persisted? %>
-  $('.answers').html('<%== j render @answers %>');
+  $('.answers').html('<%== j render @answers.sort_by_best %>');
 <% end %>
