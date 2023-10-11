@@ -96,6 +96,17 @@ RSpec.describe QuestionsController, type: :controller do
         patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
         expect(response).to render_template :update
       end
+
+      it 'removes the attached files from the question' do
+        file = fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'file1.txt'), 'text/plain')
+
+        question.files.attach(file)
+
+        patch :update, params: { id: question.id, question: { remove_files: [question.files.first.id] } }, format: :js
+
+        question.reload
+        expect(question.files).to be_empty
+      end
     end
 
     context 'with invalid attributes' do

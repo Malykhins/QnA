@@ -1,6 +1,6 @@
 h1 Welcome to Home Page
 
 .questions
-  = render @questions
+  = render @questions.order(updated_at: :desc)
 
 p= link_to 'Ask question', new_question_path

@@ -15,11 +15,17 @@ feature 'User can edit his question', %q{
   end
 
   describe 'Authenticated user', js: true do
-    scenario 'edit his question' do
+    background do
+      file = Rails.root.join('spec', 'fixtures', 'files', 'file1.txt')
+      question.files.attach(io: File.open(file), filename: 'file1.txt')
+
       sign_in(user)
       visit questions_path
 
       click_on 'Edit'
+    end
+
+    scenario 'edit his question' do
       within '.questions' do
         fill_in 'Title', with: 'edited title'
         click_on 'Save'
@@ -28,6 +34,25 @@ feature 'User can edit his question', %q{
         expect(page).to have_content 'edited title'
         expect(page).to_not have_selector 'textarea'
       end
+    end
+
+    scenario 'edit his question with attachments' do
+      within '.questions' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+        click_on 'Save'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
+    scenario 'removes files from their own question' do
+      find('input[type="checkbox"]').click
+
+      click_button 'Save'
+
+      expect(page).to_not have_link 'file1.txt'
     end
   end
 end

@@ -28,9 +28,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) if current_user.author_of?(@question)
+    return unless current_user.author_of?(@question)
 
-    if @question.persisted?
+    if @question.update(question_params)
+      params[:question][:remove_files]&.each do |file_id|
+        @question.files.find_by_id(file_id)&.purge
+      end
       flash.now[:notice] = 'Your question successfully updated!'
     else
       flash.now[:error] = 'Error updating a question!'
