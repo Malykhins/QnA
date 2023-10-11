@@ -31,7 +31,9 @@ class AnswersController < ApplicationController
     return unless current_user.author_of?(@answer)
 
     if @answer.update(answer_params)
-      @answer.files.attach(params[:files]) if params[:files].present?
+      params[:answer][:remove_files]&.each do |file_id|
+        @answer.files.find_by_id(file_id)&.purge
+      end
       flash.now[:notice] = 'Your answer was successfully updated!'
     else
       flash.now[:error] = 'Error updating the answer!'

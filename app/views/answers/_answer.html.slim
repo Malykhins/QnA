@@ -29,6 +29,15 @@ p = "Best" if answer.best
     = f.label :files
     = f.file_field :files, multiple: true
 
+    - if answer.files.attached?
+      br
+      fieldset
+        legend Select files to delete
+        - answer.files.each do |file|
+          label
+            = check_box_tag 'answer[remove_files][]', file.id
+            = file.filename
+
     br
     = f.submit 'Save'
 
