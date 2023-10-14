@@ -43,6 +43,8 @@ group :development, :test do
   gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'aws-sdk-s3', require: false
+  gem 'dotenv-rails'
 end
 
 group :development do
