@@ -16,9 +16,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
+    return unless current_user.author_of?(@answer)
+
     @answers = Answer.all
 
-    @answer.destroy if current_user.author_of?(@answer)
+    @answer.files.purge
+    @answer.destroy
 
     if @answer.persisted?
       flash.now[:error] = 'Error answer not deleted!'
@@ -34,6 +37,7 @@ class AnswersController < ApplicationController
       params[:answer][:remove_files]&.each do |file_id|
         @answer.files.find_by_id(file_id)&.purge
       end
+
       flash.now[:notice] = 'Your answer was successfully updated!'
     else
       flash.now[:error] = 'Error updating the answer!'
@@ -41,15 +45,11 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    return unless current_user.author_of?(@answer.question)
+    return unless current_user.author_of?(@answer.question) || params[:answer][:best].present?
 
-    if params[:answer][:best]
-      @answer.mark_as_best(params[:answer][:best])
-    else
-      @answer.update_column(:best, false)
-    end
+    @answer.mark_as_best(params[:answer][:best])
 
-    flash.now[:notice] = 'The best answer is called!'
+    flash.now[:notice] = 'Best answer status updated successfully!'
   end
 
   private

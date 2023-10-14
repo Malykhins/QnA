@@ -2,11 +2,10 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show edit update destroy]
+  before_action :set_question, only: %i[show update destroy]
   before_action :find_questions, only: %i[index update]
 
-  def index
-  end
+  def index; end
 
   def show
     @answers = @question.answers.sort_by_best
@@ -34,6 +33,7 @@ class QuestionsController < ApplicationController
       params[:question][:remove_files]&.each do |file_id|
         @question.files.find_by_id(file_id)&.purge
       end
+
       flash.now[:notice] = 'Your question successfully updated!'
     else
       flash.now[:error] = 'Error updating a question!'
@@ -41,7 +41,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy if current_user.author_of?(@question)
+    return unless current_user.author_of?(@question)
+
+    @question.files.purge
+    @question.destroy
+
     redirect_to questions_path, notice: 'Your question successfully deleted.'
   end
 
