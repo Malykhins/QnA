@@ -8,6 +8,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 require ("jquery")
+require("@nathanvda/cocoon")
 
 const context = require.context('.', true, /\.js$/)
 context.keys().forEach(context)

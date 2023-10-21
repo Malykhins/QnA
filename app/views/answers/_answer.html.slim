@@ -2,42 +2,49 @@ p = answer.body
 p = "Best" if answer.best
 
 - if answer.files.attached?
-  - answer.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
+	- answer.files.each do |file|
+		p= link_to file.filename.to_s, url_for(file)
+
+.links
+	- if answer.links.present?
+		p Links:
+		ul
+			- answer.links.each do |link|
+				= li = link_to link.name, link.url
 
 
 .best-answer[id="best-answer-#{answer.id}"]
-  - if current_user&.author_of?(answer.question)
-    = form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
-      = f.check_box :best, checked: answer.best, onchange: "$.ajax({ url: $(this.form).attr('action'),
+	- if current_user&.author_of?(answer.question)
+		= form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
+			= f.check_box :best, checked: answer.best, onchange: "$.ajax({ url: $(this.form).attr('action'),
                                                  method: $(this.form).attr('method'),
                                                  data: $(this.form).serialize() });"
-      = f.label :best, 'Best Answer'
+			= f.label :best, 'Best Answer'
 
 - if current_user&.author_of?(answer)
-  p = link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
-  p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+	p = link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
+	p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  .answer-errors[class="#{answer.id}"]
-    = render 'shared/errors', resource: @answer
+	.answer-errors[class="#{answer.id}"]
+		= render 'shared/errors', resource: @answer
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false, multipart: true do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body, value: answer.body
+	= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false, multipart: true do |f|
+		= f.label :body, 'Your answer'
+		= f.text_area :body, value: answer.body
 
-    br
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+		br
+		= f.label :files
+		= f.file_field :files, multiple: true, direct_upload: true
 
-    - if answer.files.attached?
-      br
-      fieldset
-        legend Select files to delete
-        - answer.files.each do |file|
-          label
-            = check_box_tag 'answer[remove_files][]', file.id
-            = file.filename
+		- if answer.files.attached?
+			br
+			fieldset
+				legend Select files to delete
+				- answer.files.each do |file|
+					label
+						= check_box_tag 'answer[remove_files][]', file.id
+						= file.filename
 
-    br
-    = f.submit 'Save'
+		br
+		= f.submit 'Save'
 

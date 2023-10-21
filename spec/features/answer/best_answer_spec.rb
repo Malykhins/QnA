@@ -25,7 +25,7 @@ feature 'User can mark the answer as best', "
       within(".answers .best-answer#best-answer-#{answer.id}") do
         expect(page).to have_checked_field
       end
-      expect(page).to have_content 'The best answer is called!'
+      expect(page).to have_content 'Best answer status updated successfully!'
     end
   end
 
