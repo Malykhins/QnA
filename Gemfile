@@ -45,6 +45,7 @@ group :development, :test do
   gem 'rubocop-rspec'
   gem 'aws-sdk-s3', require: false
   gem 'dotenv-rails'
+  gem "cocoon"
 end
 
 group :development do

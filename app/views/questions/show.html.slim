@@ -11,9 +11,7 @@ p = @question.body
 .links
 	- if @question.links.present?
 		p Links:
-		ul
-			- @question.links.each do |link|
-				= li = link_to link.name, link.url
+		= render 'shared/links', resource: @question
 
 h2 Answer:
 

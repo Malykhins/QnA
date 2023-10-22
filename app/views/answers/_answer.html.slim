@@ -8,10 +8,7 @@ p = "Best" if answer.best
 .links
 	- if answer.links.present?
 		p Links:
-		ul
-			- answer.links.each do |link|
-				= li = link_to link.name, link.url
-
+		= render 'shared/links', resource: answer
 
 .best-answer[id="best-answer-#{answer.id}"]
 	- if current_user&.author_of?(answer.question)
