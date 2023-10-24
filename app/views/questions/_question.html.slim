@@ -36,6 +36,11 @@ p= link_to 'Show', question_path(question)
           = check_box_tag 'question[remove_files][]', file.id
           = file.filename
 
+  br
+    p Links:
+    = f.fields_for :links do |l|
+    .links
+      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
 
   br
   = f.submit 'Save'

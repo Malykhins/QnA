@@ -1,4 +1,7 @@
 ul
 	- resource.links.each do |link|
 		li
+			p Link:
 			= link_to link.name, link.url
+			| |
+			= link_to 'Delete', link_path(link), method: :delete, data: { confirm: 'Are you sure you want to delete this link?' }

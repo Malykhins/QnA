@@ -23,10 +23,10 @@ class AnswersController < ApplicationController
     @answer.files.purge
     @answer.destroy
 
-    if @answer.persisted?
-      flash.now[:error] = 'Error answer not deleted!'
-    else
+    if @answer.destroyed?
       flash.now[:notice] = 'Your answer successfully deleted!'
+    else
+      flash.now[:error] = 'Error answer not deleted!'
     end
   end
 
@@ -57,7 +57,6 @@ private
   def set_answer
     @answer = Answer.with_attached_files.find(params[:id])
   end
-
   def answer_params
     params.require(:answer).permit(:body, :best, files: [], links_attributes: [:name, :url])
   end

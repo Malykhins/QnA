@@ -43,5 +43,11 @@ p = "Best" if answer.best
 						= file.filename
 
 		br
+			p Links:
+			= f.fields_for :links do |l|
+			.links
+				= link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+
+		br
 		= f.submit 'Save'
 
