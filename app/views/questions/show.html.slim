@@ -9,15 +9,18 @@ p = @question.body
 	p= link_to 'Delete Question', question_path(@question), method: :delete
 
 .links
-	- if @question.links.present?
-		p Links:
-		= render 'shared/links', resource: @question
+	= render 'links/list', resource: @question
+
+- if @question.reward.present?
+	p User nominated reward for the best answer:
+	br
+	= @question.reward.title
+
 
 h2 Answer:
 
 .answers
 	= render @answers
-
 
 h2 Add an Answer:
 

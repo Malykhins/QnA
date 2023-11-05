@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.links.new
+    @question.build_reward
   end
 
   def create
@@ -29,7 +30,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return unless current_user.author_of?(@question)
+    return head(403) unless current_user.author_of?(@question)
 
     if @question.update(question_params)
       params[:question][:remove_files]&.each do |file_id|
@@ -43,7 +44,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    return unless current_user.author_of?(@question)
+    return head(403) unless current_user.author_of?(@question)
 
     @question.files.purge
     @question.destroy
@@ -58,7 +59,8 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: %i[id name url _destroy],
+                                     reward_attributes: [:title, :image])
   end
 
   def find_questions

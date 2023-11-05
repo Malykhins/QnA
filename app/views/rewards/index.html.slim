@@ -1,0 +1,11 @@
+h1
+	| Your Rewards:
+ol
+	- @rewards.each do |reward|
+		li
+			= "Question Reward: #{ reward.question.title }"
+			br
+				= reward.title
+			br
+				- if reward.image.attached?
+					= image_tag reward.image , size: "100x100"
