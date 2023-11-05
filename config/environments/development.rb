@@ -77,5 +77,5 @@ Rails.application.configure do
 
   config.active_storage.replace_on_assign_to_many = false
 
-  config.active_storage.service = :yandex
+  config.active_storage.service = :local
 end

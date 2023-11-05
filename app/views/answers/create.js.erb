@@ -3,10 +3,7 @@ $('.flash-message').html('<%= j render 'shared/flash' %>');
 $('.new-answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% if @answer.persisted? %>
-  $('.answers').append('<%= j render @answer %>');
-  $('textarea#answer_body').val('');
-  $('input#answer_files').val('');
-  $('input#answer_links_attributes_0_name').val('');
-  $('input#answer_links_attributes_0_url').val('');
-<% end %>
+	$('.answers').append('<%= j render @answer %>');
 
+	$('.new-answer')[0].reset()
+<% end %>

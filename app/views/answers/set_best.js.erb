@@ -1,3 +1,5 @@
 $('.flash-message').html('<%= j render 'shared/flash' %>');
 
 $('.answers').html('<%= j render @answer.question.answers.sort_by_best %>');
+
+$(document).trigger('ajax:success')

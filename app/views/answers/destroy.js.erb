@@ -1,5 +1,6 @@
 $('.flash-message').html('<%= j render 'shared/flash' %>');
 
 <% unless @answer.persisted? %>
-  $('.answers').html('<%== j render @answers.sort_by_best %>');
+  $('.answers').html('<%= j render @answers.sort_by_best %>');
+  $(document).trigger("ajax:success")
 <% end %>
