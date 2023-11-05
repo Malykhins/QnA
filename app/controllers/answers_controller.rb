@@ -3,7 +3,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: %i[create]
-  before_action :set_answer, only: %i[destroy update set_best]
+  before_action :set_answer, only: %i[destroy update set_best edit]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
@@ -16,7 +16,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    return unless current_user.author_of?(@answer)
+    return head(403) unless current_user.author_of?(@answer)
 
     @answers = Answer.all
 
@@ -31,7 +31,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    return unless current_user.author_of?(@answer)
+    return head(403) unless current_user.author_of?(@answer)
 
     if @answer.update(answer_params)
       params[:answer][:remove_files]&.each do |file_id|
@@ -45,7 +45,7 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    return unless current_user.author_of?(@answer.question) || params[:answer][:best].present?
+    return head(403) unless current_user.author_of?(@answer.question) || params[:answer][:best].present?
 
     @answer.mark_as_best(params[:answer][:best])
 
@@ -57,8 +57,9 @@ private
   def set_answer
     @answer = Answer.with_attached_files.find(params[:id])
   end
+
   def answer_params
-    params.require(:answer).permit(:body, :best, files: [], links_attributes: [:name, :url])
+    params.require(:answer).permit(:body, :best, files: [], links_attributes: %i[id name url _destroy])
   end
 
   def set_question

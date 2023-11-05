@@ -1,46 +1,43 @@
 p= question.title
 
 - if question.files.attached?
-  - question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
+	- question.files.each do |file|
+		p= link_to file.filename.to_s, url_for(file)
 
 p= link_to 'Show', question_path(question)
 
 - if current_user&.author_of?(question)
-  p= link_to 'Delete Question', question_path(question), method: :delete, data: { confirm: 'Are you sure?' }
+	p= link_to 'Delete Question', question_path(question), method: :delete, data: { confirm: 'Are you sure?' }
 
-  p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id}
+	p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
 .question-errors[class= "#{ question.id }"]
-  = render 'shared/errors', resource: @question
+	= render 'shared/errors', resource: @question
 
 = form_with model: question, class: 'hidden', html: { id: "edit-question-#{ question.id }" }, local: false, multipart: true do |f|
 
-  = f.label :title
-  = f.text_field :title
+	= f.label :title
+	= f.text_field :title
 
-  br
-  = f.label :body, 'Your question'
-  = f.text_area :body
+	br
+		= f.label :body, 'Your question'
+		= f.text_area :body
 
-  br
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+	br
+		= f.label :files
+		= f.file_field :files, multiple: true
 
-  - if question.files.attached?
-    br
-    fieldset
-      legend Select files to delete
-      - question.files.each do |file|
-        label
-          = check_box_tag 'question[remove_files][]', file.id
-          = file.filename
+	- if question.files.attached?
+		br
+		fieldset
+			legend Select files to delete
+			- question.files.each do |file|
+				label
+					= check_box_tag 'question[remove_files][]', file.id
+					= file.filename
 
-  br
-    p Links:
-    = f.fields_for :links do |l|
-    .links
-      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+	br
+		= render 'links/add', f: f
 
-  br
-  = f.submit 'Save'
+	br
+		= f.submit 'Save'

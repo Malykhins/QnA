@@ -1,3 +1,4 @@
+
 p = answer.body
 p = "Best" if answer.best
 
@@ -6,16 +7,14 @@ p = "Best" if answer.best
 		p= link_to file.filename.to_s, url_for(file)
 
 .links
-	- if answer.links.present?
-		p Links:
-		= render 'shared/links', resource: answer
+	= render 'links/list', resource: answer
 
 .best-answer[id="best-answer-#{answer.id}"]
 	- if current_user&.author_of?(answer.question)
 		= form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
 			= f.check_box :best, checked: answer.best, onchange: "$.ajax({ url: $(this.form).attr('action'),
-                                                 method: $(this.form).attr('method'),
-                                                 data: $(this.form).serialize() });"
+																								 method: $(this.form).attr('method'),
+																								 data: $(this.form).serialize() });"
 			= f.label :best, 'Best Answer'
 
 - if current_user&.author_of?(answer)
@@ -23,7 +22,7 @@ p = "Best" if answer.best
 	p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
 	.answer-errors[class="#{answer.id}"]
-		= render 'shared/errors', resource: @answer
+		= render 'shared/errors', resource: answer
 
 	= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false, multipart: true do |f|
 		= f.label :body, 'Your answer'
@@ -31,7 +30,7 @@ p = "Best" if answer.best
 
 		br
 		= f.label :files
-		= f.file_field :files, multiple: true, direct_upload: true
+		= f.file_field :files, multiple: true
 
 		- if answer.files.attached?
 			br
@@ -43,10 +42,7 @@ p = "Best" if answer.best
 						= file.filename
 
 		br
-			p Links:
-			= f.fields_for :links do |l|
-			.links
-				= link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+			= render 'links/add', f: f
 
 		br
 		= f.submit 'Save'

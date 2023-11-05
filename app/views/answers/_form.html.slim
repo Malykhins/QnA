@@ -5,14 +5,10 @@
 
 	br
 	= f.label :files
-	= f.file_field :files, multiple: true, direct_upload: true
+	= f.file_field :files, multiple: true
 
 	br
-	p Links:
-	= f.fields_for :links do |l|
-		= render 'shared/link_fields', f: l
-	.links
-		= link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+	= render 'links/add', f: f
 
 	br
 	= f.submit 'Create Answer'
