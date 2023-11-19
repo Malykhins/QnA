@@ -1,6 +1,9 @@
 require 'rails_helper'
+require Rails.root.join "spec/concerns/votable_spec.rb"
 
 RSpec.describe Question, type: :model do
+  it_behaves_like "votable"
+
   it { should validate_presence_of :title }
 
   it { should validate_presence_of :body }

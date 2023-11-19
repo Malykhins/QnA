@@ -1,6 +1,4 @@
 class LinksController < ApplicationController
-  before_action :authenticate_user!, only: %i[destroy]
-
   def destroy
     @link = Link.find(params[:id])
     object = @link.linkable
