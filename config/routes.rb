@@ -1,10 +1,18 @@
 # frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :users
   root to: 'questions#index'
 
-  resources :questions do
-    resources :answers, shallow: true do
+  concern :votable do
+    member do
+      post :vote_up, :vote_down
+      delete :unvote
+    end
+  end
+
+  resources :questions, concerns: :votable do
+    resources :answers, concerns: :votable, shallow: true do
       patch 'set_best', on: :member
     end
   end

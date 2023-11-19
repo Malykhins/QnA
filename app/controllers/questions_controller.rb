@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_question, only: %i[show update destroy]
   before_action :find_questions, only: %i[index update]
+
+  include Voted
 
   def index; end
 
@@ -52,7 +54,7 @@ class QuestionsController < ApplicationController
     redirect_to questions_path, notice: 'Your question successfully deleted.'
   end
 
-  private
+private
 
   def set_question
     @question = Question.with_attached_files.find(params[:id])

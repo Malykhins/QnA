@@ -1,4 +1,7 @@
 h1 = @question.title
+
+= render 'shared/vote', resource: @question
+
 p = @question.body
 
 - if @question.files.attached?

@@ -1,6 +1,8 @@
 
-p = answer.body
-p = "Best" if answer.best
+h2 = answer.body
+p = "The best according to the author of the question!" if answer.best
+
+= render 'shared/vote', resource: answer
 
 - if answer.files.attached?
 	- answer.files.each do |file|
