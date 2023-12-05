@@ -6,7 +6,6 @@ consumer.subscriptions.create("QuestionsChannel", {
     },
 
     disconnected() {
-        // Called when the subscription has been terminated by the server
     },
 
     received(data) {
@@ -14,4 +13,3 @@ consumer.subscriptions.create("QuestionsChannel", {
         $('.questions').append(data['partial']);
     }
 });
-

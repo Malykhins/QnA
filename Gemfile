@@ -35,8 +35,6 @@ gem 'slim-rails'
 
 gem 'devise'
 
-gem 'redis'
-
 gem 'gon'
 
 group :development, :test do
