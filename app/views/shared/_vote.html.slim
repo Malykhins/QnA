@@ -1,9 +1,11 @@
 .errors-vote id="#{resource.class.name.downcase}-#{resource.id}-error"
-- if user_signed_in? && !current_user&.author_of?(resource)
 
-	.rating id="#{resource.class.name.downcase}-#{resource.id}"
-		- rating = resource.votes.present? ? resource.vote_rating : 0
-		p= "Rating: #{rating}"
+.rating id="#{resource.class.name.downcase}-#{resource.id}"
+
+	- rating = resource.votes.present? ? resource.vote_rating : 0
+	p= "Rating: #{rating}"
+
+- if !current_user&.author_of?(resource)
 
 	.vote class="#{'hidden' if resource.voted?(current_user)}" id="#{resource.class.name.downcase}-#{resource.id}-like-dislike"
 		= button_to 'Like', polymorphic_path(resource, action: :vote_up),

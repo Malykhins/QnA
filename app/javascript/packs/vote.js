@@ -1,9 +1,9 @@
 $(document).on('turbolinks:load', function () {
-    $('.vote, .unvote').on('ajax:success', displayRating)
+    $('.container').on('ajax:success', '.vote, .unvote', displayRating)
         .on('page:update', displayRating)
         .on('ajax:error', displayErrors)
-
 })
+
 
 function displayRating (e) {
     console.log(e.detail)

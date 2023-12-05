@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
   after_action :public_answer, only: :create
 
   include Voted
+  include Commented
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))

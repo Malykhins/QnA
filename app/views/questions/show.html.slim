@@ -4,6 +4,14 @@ h1 = @question.title
 
 p = @question.body
 
+= render 'comments/comments', resource: @question
+
+= render 'comments/form', resource: @question
+
+= link_to 'Add Comment', '#',	class: 'add-comment-form-link',
+															remote: true,
+															data: { resource_id: "#{@question.class.name.downcase}-#{@question.id}" }
+
 - if @question.files.attached?
 	- @question.files.each do |file|
 		p= link_to file.filename.to_s, url_for(file)

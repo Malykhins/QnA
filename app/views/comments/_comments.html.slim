@@ -1,0 +1,9 @@
+.comments id="#{resource.class.name.downcase}-#{resource.id}"
+	b= "Comments: "
+
+	- if resource.comments.present?
+		ul
+			- resource.comments.each do |comment|
+				li= comment.body
+	- else
+		span= 'No comments! Be the first!'

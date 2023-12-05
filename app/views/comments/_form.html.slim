@@ -1,0 +1,12 @@
+.new-comment id="#{resource.class.name.downcase}-#{resource.id}-errors"
+
+.new-comment class="hidden" id="#{resource.class.name.downcase}-#{resource.id}-form"
+	= form_with model: resource.comments.new,
+							url: polymorphic_path(resource, action: :create_comment),
+							local: false do |f|
+		br
+		= f.label :body, 'Comment:'
+		= f.text_area :body
+
+		br
+		= f.submit 'Create Comment'

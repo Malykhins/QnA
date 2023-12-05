@@ -2,7 +2,14 @@
 h2 = answer.body
 p = "The best according to the author of the question!" if answer.best
 
-= render 'shared/vote', resource: answer
+= render 'shared/vote', resource: answer, current_user: current_user
+
+= render 'comments/comments', resource: answer
+
+= render 'comments/form', resource: answer
+
+= link_to 'Add Comment', '#', class: 'add-comment-form-link',
+				data: { resource_id: "#{answer.class.name.downcase}-#{answer.id}" }
 
 - if answer.files.attached?
 	- answer.files.each do |file|

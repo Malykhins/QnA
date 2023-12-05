@@ -1,0 +1,16 @@
+$('.flash-message').html('<%= j render('shared/flash') %>');
+
+<% if @comment.errors.any? %>
+    errorMessages();
+<% else %>
+    $('.new-comment#' + '<%= @commentable.class.name.downcase %>-<%= @commentable.id %>' + '-errors').hide()
+<% end %>
+
+function errorMessages() {
+    let commentableId = '.new-comment#' + '<%= @commentable.class.name.downcase %>-<%= @commentable.id %>'
+    let commentErrors = commentableId + '-errors'
+    let commentForm = commentableId + '-form'
+
+    $(commentErrors).html('<%= j render('shared/errors', resource: @comment) %>').show();
+    $(commentForm).removeClass('hidden')
+}

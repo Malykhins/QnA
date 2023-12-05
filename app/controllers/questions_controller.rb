@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   after_action :public_question, only: :create
 
   include Voted
+  include Commented
 
   def index; end
 
