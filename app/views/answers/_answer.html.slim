@@ -9,7 +9,7 @@ p = "The best according to the author of the question!" if answer.best
 		p= link_to file.filename.to_s, url_for(file)
 
 .links
-	= render 'links/list', resource: answer
+	= render 'links/list', resource: answer, current_user: current_user
 
 .best-answer[id="best-answer-#{answer.id}"]
 	- if current_user&.author_of?(answer.question)

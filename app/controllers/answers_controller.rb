@@ -3,6 +3,7 @@
 class AnswersController < ApplicationController
   before_action :set_question, only: %i[create]
   before_action :set_answer, only: %i[destroy update set_best edit]
+  after_action :public_answer, only: :create
 
   include Voted
 
@@ -65,5 +66,14 @@ private
 
   def set_question
     @question = Question.find(params[:question_id])
+  end
+
+  def public_answer
+    return if @answer.errors.any?
+
+    AnswersChannel.broadcast_to(@question, partial:
+      ApplicationController.render(partial: 'answers/answer', locals: { answer: @answer, current_user: nil }),
+                                answer_author_id: current_user.id,
+                                answer_id: @answer.id)
   end
 end
