@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_question, only: %i[show update destroy]
   before_action :find_questions, only: %i[index update]
+  after_action :public_question, only: :create
 
   include Voted
 
@@ -67,5 +68,13 @@ private
 
   def find_questions
     @questions = Question.all
+  end
+
+  def public_question
+    return if @question.errors.any?
+
+    ActionCable.server.broadcast('questions_channel', partial:
+      ApplicationController.render(partial: 'questions/question',
+                                   locals: { question: @question, current_user: nil }))
   end
 end
