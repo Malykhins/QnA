@@ -37,6 +37,12 @@ gem 'devise'
 
 gem 'gon'
 
+gem 'omniauth'
+
+gem 'omniauth-github'
+
+gem 'omniauth-rails_csrf_protection'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
