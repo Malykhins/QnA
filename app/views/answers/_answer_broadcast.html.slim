@@ -1,0 +1,20 @@
+h2 = answer.body
+
+= render 'shared/vote', resource: answer, current_user: nil
+
+= render 'comments/comments', resource: answer
+= render 'comments/form', resource: answer
+= link_to 'Add Comment', '#', class: 'add-comment-form-link',
+				data: { resource_id: "#{answer.class.name.downcase}-#{answer.id}" }
+
+- if answer.files.attached?
+	- answer.files.each do |file|
+		p= link_to file.filename.to_s, url_for(file)
+
+.links
+	- if answer.links.present?
+		p Links:
+		ul
+			- answer.links.each do |link|
+				li class="link-#{link.id}"
+					= link_to link.name, link.url, target: :blank

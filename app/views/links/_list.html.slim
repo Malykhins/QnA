@@ -5,5 +5,5 @@
 			li class="link-#{link.id}"
 				= link_to link.name, link.url, target: :blank
 				'
-				- if current_user&.author_of?(resource)
+				- if can? :destroy, link
 					= link_to 'Delete', link_path(link), method: :delete,	remote: true

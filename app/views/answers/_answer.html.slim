@@ -1,14 +1,12 @@
-
 h2 = answer.body
 p = "The best according to the author of the question!" if answer.best
 
 = render 'shared/vote', resource: answer, current_user: current_user
 
-= render 'comments/comments', resource: answer
-
-= render 'comments/form', resource: answer
-
-= link_to 'Add Comment', '#', class: 'add-comment-form-link',
+- if can? :create_comment, answer
+	= render 'comments/comments', resource: answer
+	= render 'comments/form', resource: answer
+	= link_to 'Add Comment', '#', class: 'add-comment-form-link',
 				data: { resource_id: "#{answer.class.name.downcase}-#{answer.id}" }
 
 - if answer.files.attached?
@@ -19,15 +17,17 @@ p = "The best according to the author of the question!" if answer.best
 	= render 'links/list', resource: answer, current_user: current_user
 
 .best-answer[id="best-answer-#{answer.id}"]
-	- if current_user&.author_of?(answer.question)
+	- if can? :set_best, answer
 		= form_with model: answer, url: set_best_answer_path(answer), method: :patch do |f|
 			= f.check_box :best, checked: answer.best, onchange: "$.ajax({ url: $(this.form).attr('action'),
 																								 method: $(this.form).attr('method'),
 																								 data: $(this.form).serialize() });"
 			= f.label :best, 'Best Answer'
 
-- if current_user&.author_of?(answer)
+- if can? :destroy, answer
 	p = link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
+
+- if can? :update, answer
 	p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
 	.answer-errors[class="#{answer.id}"]

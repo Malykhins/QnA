@@ -1,22 +1,24 @@
 h1 = @question.title
 
-= render 'shared/vote', resource: @question
+- if can? :vote, @question
+	= render 'shared/vote', resource: @question
 
 p = @question.body
 
-= render 'comments/comments', resource: @question
+- if can? :create_comment, @question
+	= render 'comments/comments', resource: @question
 
-= render 'comments/form', resource: @question
+	= render 'comments/form', resource: @question
 
-= link_to 'Add Comment', '#',	class: 'add-comment-form-link',
-															remote: true,
-															data: { resource_id: "#{@question.class.name.downcase}-#{@question.id}" }
+	= link_to 'Add Comment', '#',	class: 'add-comment-form-link',
+																remote: true,
+																data: { resource_id: "#{@question.class.name.downcase}-#{@question.id}" }
 
 - if @question.files.attached?
 	- @question.files.each do |file|
 		p= link_to file.filename.to_s, url_for(file)
 
-- if current_user&.author_of?(@question)
+- if can? :destroy, @question
 	p= link_to 'Delete Question', question_path(@question), method: :delete
 
 .links
@@ -33,10 +35,12 @@ h2 Answer:
 .answers
 	= render @answers
 
-h2 Add an Answer:
 
-.new-answer-errors
-	= render 'shared/errors', resource: @answer
+- if can? :create, Answer
+	h2 Add an Answer:
 
-.new-answer-form
-	= render 'answers/form'
+	.new-answer-errors
+		= render 'shared/errors', resource: @answer
+
+	.new-answer-form
+		= render 'answers/form'

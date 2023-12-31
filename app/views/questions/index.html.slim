@@ -1,7 +1,9 @@
 h1 Welcome to Home Page
-p = link_to 'Your rewards', rewards_path
+- if can? :read, Reward
+p = link_to 'Your rewards for best answers', rewards_path
 
 .questions
   = render @questions.order(updated_at: :desc)
 
-p= link_to 'Ask question', new_question_path
+- if can? :create, Question
+	p= link_to 'Ask question', new_question_path
