@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AnswersChannel < ApplicationCable::Channel
   def subscribed
     @question = Question.find_by_id(params[:id])

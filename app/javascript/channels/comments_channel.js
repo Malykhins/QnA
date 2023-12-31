@@ -17,11 +17,11 @@ consumer.subscriptions.create("CommentsChannel", {
         let commentInvite = $(commentsTagId + ' span');
 
         if (commentsList.length) {
-                commentsList.append(newComment);
-            } else {
-                let newList = $('<ul>').append(newComment);
-                $(commentsTagId).append(newList);
-                commentInvite.hide();
-            }
+            commentsList.append(newComment);
+        } else {
+            let newList = $('<ul>').append(newComment);
+            commentInvite.hide();
+            $(commentsTagId).append(newList);
         }
+    }
 });
