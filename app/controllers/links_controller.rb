@@ -1,9 +1,12 @@
 class LinksController < ApplicationController
+  authorize_resource
+
   def destroy
     @link = Link.find(params[:id])
     object = @link.linkable
 
-    return head(403) unless current_user.author_of?(object)
+    return head(403) unless can? :destroy, object
+
     @link.destroy
 
     if @link.destroyed?

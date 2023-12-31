@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
   before_action :find_questions, only: %i[index update]
   after_action :public_question, only: :create
 
+  authorize_resource
+
   include Voted
   include Commented
 
@@ -36,7 +38,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return head(403) unless current_user.author_of?(@question)
+    return head(403) unless can? :update, @question
 
     if @question.update(question_params)
       params[:question][:remove_files]&.each do |file_id|
@@ -50,7 +52,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    return head(403) unless current_user.author_of?(@question)
+    return head(403) unless can? :destroy, @question
 
     @question.files.purge
     @question.destroy
@@ -77,7 +79,6 @@ private
     return if @question.errors.any?
 
     ActionCable.server.broadcast('questions_channel', partial:
-      ApplicationController.render(partial: 'questions/question',
-                                   locals: { question: @question, current_user: nil }))
+      ApplicationController.render(partial: 'questions/question_broadcast', locals: { question: @question }))
   end
 end

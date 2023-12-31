@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[destroy update set_best edit]
   after_action :public_answer, only: :create
 
+  authorize_resource
+
   include Voted
   include Commented
 
@@ -19,14 +21,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    return head(403) unless current_user.author_of?(@answer)
-
-    @answers = Answer.all
+    return head(302) unless can? :destroy, @answer
 
     @answer.files.purge
     @answer.destroy
 
     if @answer.destroyed?
+      @answers = @answer.question.answers
       flash.now[:notice] = 'Your answer successfully deleted!'
     else
       flash.now[:error] = 'Error answer not deleted!'
@@ -34,7 +35,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    return head(403) unless current_user.author_of?(@answer)
+    return head(403) unless can? :update, @answer
 
     if @answer.update(answer_params)
       params[:answer][:remove_files]&.each do |file_id|
@@ -48,7 +49,7 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    return head(403) unless current_user.author_of?(@answer.question) || params[:answer][:best].present?
+    return head(403) unless (can? :set_best, @answer) || params[:answer][:best].present?
 
     @answer.mark_as_best(params[:answer][:best])
 
@@ -69,11 +70,16 @@ private
     @question = Question.find(params[:question_id])
   end
 
+  def set_answers
+    @answers = Answer.all
+  end
+
   def public_answer
     return if @answer.errors.any?
 
     AnswersChannel.broadcast_to(@question, partial:
-      ApplicationController.render(partial: 'answers/answer', locals: { answer: @answer, current_user: nil }),
+      ApplicationController.render(partial: 'answers/answer_broadcast',
+                                   locals: { answer: @answer, current_user: current_user }),
                                 answer_author_id: current_user.id,
                                 answer_id: @answer.id)
   end
