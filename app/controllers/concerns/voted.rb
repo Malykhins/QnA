@@ -8,21 +8,21 @@ module Voted
   end
 
   def vote_up
-    return render_error if current_user.author_of?(@votable) || @votable.voted?(current_user)
+    return render_error if cannot?(:vote_up, @votable) || @votable.voted?(current_user)
 
     @votable.vote_up(current_user)
     render_json
   end
 
   def vote_down
-    return render_error if current_user.author_of?(@votable) || @votable.voted?(current_user)
+    return render_error if cannot?(:vote_down, @votable) || @votable.voted?(current_user)
 
     @votable.vote_down(current_user)
     render_json
   end
 
   def unvote
-    return render_error if current_user.author_of?(@votable)
+    return render_error if cannot?(:unvote, @votable)
 
     @votable.unvote(current_user)
     render_json
