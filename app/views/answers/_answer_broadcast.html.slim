@@ -1,6 +1,29 @@
 h2 = answer.body
 
-= render 'shared/vote', resource: answer, current_user: nil
+.errors-vote id="#{answer.class.name.downcase}-#{answer.id}-error"
+
+.rating id="#{answer.class.name.downcase}-#{answer.id}"
+
+	- rating = answer.votes.present? ? answer.vote_rating : 0
+	p= "Rating: #{rating}"
+
+- if !current_user&.author_of?(answer)
+	.vote class="#{'hidden' if answer.voted?(current_user)}" id="#{answer.class.name.downcase}-#{answer.id}-like-dislike"
+		= button_to 'Like', polymorphic_path(answer, action: :vote_up),
+						method: :post,
+						remote: true,
+						data: { type: :json }
+
+		= button_to 'Dislike', polymorphic_path(answer, action: :vote_down),
+						method: :post,
+						remote: true,
+						data: { type: :json }
+
+	.unvote class="#{'hidden' unless answer.voted?(current_user)}" id="#{answer.class.name.downcase}-#{answer.id}-unvote"
+		= button_to 'Reset vote', polymorphic_path(answer, action: :unvote),
+						method: :delete,
+						remote: true,
+						data: { type: :json }
 
 = render 'comments/comments', resource: answer
 = render 'comments/form', resource: answer

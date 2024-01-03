@@ -56,7 +56,7 @@ class AnswersController < ApplicationController
     flash.now[:notice] = 'Best answer status updated successfully!'
   end
 
-private
+  private
 
   def set_answer
     @answer = Answer.with_attached_files.find(params[:id])
@@ -79,8 +79,8 @@ private
 
     AnswersChannel.broadcast_to(@question, partial:
       ApplicationController.render(partial: 'answers/answer_broadcast',
-                                   locals: { answer: @answer, current_user: current_user }),
-                                answer_author_id: current_user.id,
-                                answer_id: @answer.id)
+                                   locals: { answer: @answer, current_user: nil }),
+                                           answer_author_id: current_user.id,
+                                           answer_id: @answer.id)
   end
 end
