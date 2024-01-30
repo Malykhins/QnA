@@ -26,6 +26,7 @@ class Ability
 
   def user_abilities
     guest_abilities
+    can :me, User
     can :create, [Question, Answer]
     can :create_comment, [Question, Answer]
     can :vote, [Question, Answer] do |votable|
