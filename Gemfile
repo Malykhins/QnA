@@ -30,34 +30,29 @@ gem 'jbuilder', '~> 2.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
-
-gem 'slim-rails'
-
-gem 'devise'
-
-gem 'gon'
-
-gem 'omniauth'
-
-gem 'omniauth-github'
-
-gem 'omniauth-rails_csrf_protection'
-
-gem 'omniauth-google-oauth2'
-
 gem 'cancancan'
+gem 'devise'
+gem 'gon'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'
+gem 'slim-rails'
+gem 'doorkeeper'
+gem 'active_model_serializers', '~> 0.10'
+gem 'oj'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'aws-sdk-s3', require: false
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem "cocoon"
+  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'rspec-rails', '~> 4.0'
   gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'aws-sdk-s3', require: false
-  gem 'dotenv-rails'
-  gem "cocoon"
 end
 
 group :development do
@@ -76,7 +71,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'shoulda-matchers'
-  gem 'rails-controller-testing'
   gem 'launchy'
+  gem 'rails-controller-testing'
+  gem 'shoulda-matchers'
 end
