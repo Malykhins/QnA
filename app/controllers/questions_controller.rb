@@ -38,8 +38,6 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return head(403) unless can? :update, @question
-
     if @question.update(question_params)
       params[:question][:remove_files]&.each do |file_id|
         @question.files.find_by_id(file_id)&.purge
@@ -52,8 +50,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    return head(403) unless can? :destroy, @question
-
     @question.files.purge
     @question.destroy
 

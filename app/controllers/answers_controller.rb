@@ -21,8 +21,6 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    return head(302) unless can? :destroy, @answer
-
     @answer.files.purge
     @answer.destroy
 
@@ -35,8 +33,6 @@ class AnswersController < ApplicationController
   end
 
   def update
-    return head(403) unless can? :update, @answer
-
     if @answer.update(answer_params)
       params[:answer][:remove_files]&.each do |file_id|
         @answer.files.find_by_id(file_id)&.purge
@@ -49,7 +45,7 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    return head(403) unless (can? :set_best, @answer) || params[:answer][:best].present?
+    return head(404) unless params[:answer][:best].present?
 
     @answer.mark_as_best(params[:answer][:best])
 

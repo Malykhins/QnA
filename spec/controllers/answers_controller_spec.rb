@@ -63,7 +63,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'returns a 403 Forbidden status' do
         delete :destroy, params: { id: answer }, format: :js
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(403)
       end
     end
   end

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Question Api', type: :request do
 
   describe 'GET /api/v1/questions' do
-    let(:method){:get}
+    let(:method) { :get }
     let(:api_url) { '/api/v1/questions' }
 
     it_behaves_like 'API Authorizable'
