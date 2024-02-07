@@ -9,7 +9,9 @@ describe 'Profiles API', type: :request do
     let(:api_url) { '/api/v1/profiles/me' }
     let(:respond_me) { json['user'] }
 
-    it_behaves_like 'API Authorizable'
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+    end
 
     context 'authorized' do
 
@@ -40,7 +42,9 @@ describe 'Profiles API', type: :request do
   describe 'GET /api/v1/profiles' do
     let(:api_url) { '/api/v1/profiles' }
 
-    it_behaves_like 'API Authorizable'
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+    end
 
     context 'authorized' do
       let!(:users) { create_list(:user, 3) }
